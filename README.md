@@ -1,105 +1,83 @@
-# Perplexity 2.0
+# AI Chatbot - My AI Chat Buddy
 
-A modern, responsive AI chat interface with integrated web search functionality. Perplexity 2.0 provides a clean UI similar to Perplexity.ai, combining conversational AI with real-time search capabilities
+## Project Description
 
-## ✨ Features
+AI-powered chatbot that allows users to have natural conversations with real-time streaming responses. The chatbot maintains conversation memory, remembering what you told it earlier in the same session.
 
-- **Real-time AI Responses** - Stream AI responses as they're generated
-- **Integrated Web Search** - AI can search the web for up-to-date information
-- **Conversation Memory** - Maintains context throughout your conversation
-- **Search Process Transparency** - Visual indicators show searching, reading, and writing stages
-- **Responsive Design** - Clean, modern UI that works across devices
+**In plain language:** You type a question or tell the bot something about yourself, and it responds instantly. It remembers your name and what you talked about during your conversation.
 
-## 🏗️ Architecture
+## Architecture Overview
 
-Perplexity 2.0 follows a client-server architecture:
+The application follows a client-server architecture with separate frontend and backend services:
+┌─────────────────┐ HTTP/SSE ┌─────────────────┐ API Call ┌─────────────────┐
+│ │ ◄──────────────► │ │ ◄──────────────► │ │
+│ React Frontend │ │ FastAPI Backend│ │ Groq API │
+│ (Port 3000) │ │ (Port 8000) │ │ (Llama/Mixtral)│
+│ │ │ │ │ │
+└─────────────────┘ └─────────────────┘ └─────────────────┘
 
-### Client (Next.js + React)
-- Modern React application built with Next.js
-- Real-time streaming updates using Server-Sent Events (SSE)
-- Components for message display, search status, and input handling
+## Technical Choices
+- **React/Next.js**: Modern UI framework
+- **FastAPI**: Async support for streaming responses
+- **Groq API**: Free tier, no credit card required, 30+ requests/min
+- **SSE**: Real-time response streaming
 
-### Server (FastAPI + LangGraph)
-- Python backend using FastAPI for API endpoints
-- LangGraph implementation for conversation flow with LLM and tools
-- Integration with Tavily Search API for web searching capabilities
-- Server-Sent Events for real-time streaming of AI responses
-
-## 🚀 Getting Started
+## Setup Instructions
 
 ### Prerequisites
+Python 3.10+, Node.js 18+, Git
 
-- Node.js 18+
-- Python 3.10+
-- OpenAI API key
-- Tavily API key
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/harishneel1/perplexity_2.0.git
-   cd perplexity_2.0
-
-2. **Set up the server**
-   ```bash
-   cd server
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   pip install -r requirements.txt
-
-3. **Configure environment variables**  
-   Create a `.env` file in the server directory:
-   OPENAI_API_KEY=your_openai_api_key
-   TAVILY_API_KEY=your_tavily_api_key
-   
-4. **Set up the client**
+### Steps
 ```bash
+# Clone and setup backend
+git clone <your-repo-url>
+cd perplexity_2.0/server
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+
+# Add API key to .env file
+echo GROQ_API_KEY=your-key-here > .env
+
+# Start backend
+uvicorn app:app --reload
+
+# New terminal - setup frontend
 cd ../client
 npm install
+npm run dev
+Open http://localhost:3000
 
-### Running the Application
+Known Limitations
+Free tier rate limits (30 req/min)
 
-1. **Start the server**
-   ```bash
-   cd server
-   uvicorn app:app --reload
+No persistent storage (conversations lost on refresh)
 
-2. **Start the client**
-   ```bash
-   cd client
-   npm run dev
+No user authentication
 
-3. **Open your browser and navigate to http://localhost:3000**   
+Single-user design
 
-## 🔍 How It Works
+Production Changes Needed
+Add database (PostgreSQL)
 
-1. **User sends a message** through the chat interface
-2. **Server processes the message** using GPT-4o
-3. **AI decides** whether to use search or respond directly
-4. If search is needed:
-   - Search query is sent to Tavily API
-   - Results are processed and provided back to the AI
-   - AI uses this information to formulate a response
-5. **Response is streamed** back to the client in real-time
-6. **Search stages are displayed** to the user (searching, reading, writing)
+Add user authentication (JWT)
 
-## 🤝 Contributing
+Replace uvicorn with gunicorn + nginx
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Enable HTTPS
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+AI Tools Used
+Claude AI: Debugging, error fixes, migration from Gemini to Groq
 
-## 📝 License
+GitHub Copilot: Code completion
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+Demo Video
+[Link]
 
-## 🙏 Acknowledgments
+Team
+[Your Name] - [Student ID]
 
-- Inspired by the UI and functionality of [Perplexity.ai](https://www.perplexity.ai/)
-- Built with [Next.js](https://nextjs.org/), [React](https://reactjs.org/), [FastAPI](https://fastapi.tiangolo.com/), and [LangGraph](https://github.com/langchain-ai/langgraph)
-- Powered by [OpenAI GPT-4o](https://openai.com/) and [Tavily Search API](https://tavily.com/)
+Level
+Level 2 - Multi-turn conversation with memory
+
+
